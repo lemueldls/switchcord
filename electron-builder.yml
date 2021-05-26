@@ -1,0 +1,18 @@
+appId: com.lemueldls.switchcord
+productName: "Switchcord"
+
+files:
+  - build/.start.js
+  - renderer/dist/**
+  - resources/**
+  - package.json
+
+directories:
+  buildResources: resources
+
+publish:
+  - github
+
+linux:
+  target: AppImage
+  category: Utility
