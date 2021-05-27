@@ -1,6 +1,6 @@
 {
   "name": "switchcord",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Discord Rich Presence for Nintendo Switch Games",
   "main": "build/.start.js",
   "repository": "git@github.com:lemueldls/switchcord",
