@@ -39,8 +39,6 @@ const config: NuxtConfig = {
     // "nuxt-vite",
     // https://go.nuxtjs.dev/typescript
     "@nuxt/typescript-build",
-    // https://go.nuxtjs.dev/stylelint
-    "@nuxtjs/stylelint-module",
     // https://go.nuxtjs.dev/vuetify
     "@nuxtjs/vuetify",
     // https://composition-api.nuxtjs.org
@@ -49,9 +47,6 @@ const config: NuxtConfig = {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [],
-
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

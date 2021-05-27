@@ -1,4 +1,4 @@
-import { app, BrowserWindow, app } from "electron";
+import { app, BrowserWindow } from "electron";
 
 import "./ipc";
 
