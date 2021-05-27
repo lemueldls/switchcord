@@ -19,7 +19,8 @@
     "lint": "eslint **/*.{ts,vue}"
   },
   "devDependencies": {
-    "@lemueldls/eslint-config": "^1.0.4",
+    "@nuxt/config": "^2.15.6",
+    "@nuxt/types": "^2.15.6",
     "@nuxtjs/eslint-config-typescript": "^6.0.0",
     "@types/discord-rich-presence": "^0.0.0",
     "@types/discord-rpc": "^3.0.5",
@@ -47,6 +48,7 @@
     "eslint-plugin-unicorn": "^32.0.1",
     "eslint-plugin-vuetify": "^1.0.0-beta.8",
     "node-notifier": "^10.0.0",
+    "nuxt": "^2.15.6",
     "prettier": "^2.3.0",
     "request": "^2.88.2",
     "ts-node": "^10.0.0",

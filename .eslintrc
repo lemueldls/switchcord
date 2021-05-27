@@ -12,7 +12,10 @@
     "plugin:vue/base",
     "plugin:vue/recommended",
     "airbnb-base",
-    "@lemueldls"
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:unicorn/recommended",
+    "plugin:prettier/recommended"
   ],
 
   "plugins": ["vue", "vuetify"],
@@ -34,6 +37,7 @@
     "no-shadow": "off",
     "require-await": "off",
 
+    "no-return-await": "off",
     "new-cap": "off",
     "no-new": "off",
     "no-plusplus": "off",
@@ -43,6 +47,8 @@
     "@typescript-eslint/no-non-null-assertion": "off",
     "node/no-callback-literal": "off",
 
+    "unicorn/prefer-node-protocol": "off",
+    "unicorn/prefer-module": "off",
     "unicorn/no-null": "off",
     "unicorn/filename-case": [
       "warn",
@@ -57,6 +63,44 @@
       "error",
       {
         "checkFilenames": false
+      }
+    ],
+
+    "one-var": ["warn", "never"],
+    "yoda": "warn",
+    "array-callback-return": "error",
+    "default-case-last": "error",
+    "dot-notation": "error",
+    "eqeqeq": "error",
+    "guard-for-in": "error",
+    "max-classes-per-file": "error",
+
+    "no-useless-backreference": "error",
+    "no-unsafe-optional-chaining": "error",
+    "no-unreachable-loop": "error",
+    "no-template-curly-in-string": "error",
+    "no-promise-executor-return": "error",
+    "no-prototype-builtins": "error",
+    "no-case-declarations": "error",
+    "no-div-regex": "error",
+    "no-regex-spaces": "error",
+    "no-control-regex": "error",
+    "no-eval": "error",
+    "no-extend-native": "error",
+    "no-implied-eval": "error",
+    "no-iterator": "error",
+    "no-labels": "error",
+    "no-else-return": "warn",
+    "object-shorthand": "warn",
+    "operator-assignment": "warn",
+
+    "no-fallthrough": "off",
+
+    "prefer-destructuring": [
+      "warn",
+      {
+        "object": true,
+        "array": true
       }
     ],
 
