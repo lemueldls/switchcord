@@ -14,5 +14,5 @@
     },
     "types": ["@types/node", "@nuxt/types", "@nuxtjs/vuetify"]
   },
-  "exclude": ["static", ".nuxt"]
+  "exclude": ["node_modules", ".nuxt", "dist", "static"]
 }

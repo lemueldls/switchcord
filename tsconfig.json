@@ -4,8 +4,8 @@
 
     "forceConsistentCasingInFileNames": true,
 
-    "importHelpers": false,
-    "removeComments": false,
+    "importHelpers": true,
+    "removeComments": true,
 
     "module": "commonjs",
     "target": "esnext",
