@@ -2,37 +2,49 @@ import { app, ipcMain } from "electron";
 import axios from "axios";
 import DiscordRPC from "discord-rpc";
 
-let games: any;
-const gameData: any = {};
+import games from "./games.json";
+
+import type { GameData, Game, GameKeys } from "./game";
+
+let gameData: GameData[] = [];
 
 app.whenReady().then(async () => {
-  const { data } = await axios.get("http://nintenbot.js.org/rpc.json");
+  const { data } = await axios.get<Game[]>(
+    "https://discord.com/api/v9/oauth2/applications/846855871064834059/assets"
+  );
 
-  games = data.gameLibrary;
-
-  for (const { name, pic } of games) gameData[pic] = name;
+  gameData = data
+    .filter(({ name }) => games[name])
+    .map(({ id, name: img }) => ({ id, img, name: games[img] }));
 });
 
-ipcMain.handle("games", () => games);
+ipcMain.handle("games", () => Object.values(gameData));
 
 const rpc = new DiscordRPC.Client({ transport: "ipc" });
 
-const clientId = "387406899739623426";
+rpc.login({ clientId: "846855871064834059" });
 
-rpc.login({ clientId });
-
-ipcMain.handle(
+ipcMain.on(
   "presence",
-  (_event, game: string, desc: string, time: boolean) => {
-    const name = gameData[game];
+  async (
+    _event,
+    game: GameKeys | undefined,
+    desc: string | undefined,
+    time: boolean,
+    status: string | undefined
+  ) => {
+    const name = games[game!] || "Nintendo Switch";
 
-    rpc.setActivity({
-      state: desc,
+    await rpc.setActivity({
       details: name,
-      startTimestamp: time ? new Date() : undefined,
-      largeImageKey: game,
+      state: desc || undefined,
+      startTimestamp: time ? Date.now() : undefined,
+      largeImageKey: game || "switch",
       largeImageText: name,
-      smallImageKey: "switch",
+      smallImageKey: status?.toLowerCase() || undefined,
+      smallImageText: status || undefined,
     });
   }
 );
+
+ipcMain.on("clear", () => rpc.clearActivity());
