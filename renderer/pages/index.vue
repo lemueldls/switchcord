@@ -172,7 +172,7 @@ export default defineComponent({
       description.value = localStorage.getItem("description") || "";
       time.value = !!JSON.parse(localStorage.getItem("time")!);
       status.value = statuses.find(
-        ({ name }) => name === localStorage.getItem("status")!
+        ({ name }) => name === (localStorage.getItem("status") || "None")
       )!;
 
       loadingGames.value = false;
