@@ -33,11 +33,22 @@
               :rules="gameRules"
               required
             >
+              <template #selection="{ item }">
+                <v-list-item-avatar tile>
+                  <v-img
+                    :alt="item.name"
+                    :src="`https://cdn.discordapp.com/app-assets/846855871064834059/${item.id}.png?size=40`"
+                  />
+                </v-list-item-avatar>
+
+                {{ item.name }}
+              </template>
+
               <template #item="{ item }">
                 <v-list-item-avatar tile>
                   <v-img
                     :alt="item.name"
-                    :src="`https://cdn.discordapp.com/app-assets/846855871064834059/${item.id}.png`"
+                    :src="`https://cdn.discordapp.com/app-assets/846855871064834059/${item.id}.png?size=40`"
                   />
                 </v-list-item-avatar>
 
@@ -51,8 +62,10 @@
 
             <v-text-field
               v-model="description"
-              label="Status Description"
+              label="Set a Status Description"
               prepend-icon="mdi-text"
+              :rules="descriptionRules"
+              validate-on-blur
             />
 
             <v-row>
@@ -60,7 +73,7 @@
                 <v-checkbox
                   v-model="time"
                   label="Show Time Elapsed"
-                  append-icon="mdi-timer-outline"
+                  :append-icon="`mdi-timer${time ? '' : '-off'}-outline`"
                 />
               </v-col>
 
@@ -70,8 +83,8 @@
                   :color="status.color"
                   :items="statuses"
                   item-text="name"
-                  label="Online Status"
-                  :prepend-icon="status.icon"
+                  label="Display an Online Status"
+                  :prepend-inner-icon="status.icon"
                   return-object
                 />
               </v-col>
@@ -82,14 +95,14 @@
             <v-row>
               <v-col>
                 <v-btn color="primary" block type="submit">
-                  <v-icon left>mdi-pencil</v-icon>
-                  Update
+                  <v-icon left>mdi-content-save</v-icon>
+                  Save Status
                 </v-btn>
               </v-col>
               <v-col>
                 <v-btn color="error" block @click="clear">
-                  <v-icon left>mdi-delete</v-icon>
-                  Clear
+                  <v-icon left>mdi-backspace</v-icon>
+                  Clear Status
                 </v-btn>
               </v-col>
             </v-row>
@@ -97,8 +110,15 @@
         </v-card>
       </v-form>
 
-      <v-snackbar v-model="showToast" color="success" timeout="2000" text>
-        <v-icon left>mdi-check</v-icon>
+      <v-snackbar
+        v-model="showToast"
+        color="success"
+        timeout="2000"
+        top
+        right
+        text
+      >
+        <v-icon left>mdi-check-bold</v-icon>
 
         {{ toastMessage }}
 
@@ -111,7 +131,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "@nuxtjs/composition-api";
+import { defineComponent, ref, onMounted } from "@nuxtjs/composition-api";
 
 import { ipcRenderer } from "electron";
 
@@ -145,12 +165,18 @@ export default defineComponent({
     const toastMessage = ref("");
     const showToast = ref(false);
 
-    if (process.client)
-      ipcRenderer.invoke("games").then(games => {
-        gamesList.value = games;
+    onMounted(async () => {
+      gamesList.value = await ipcRenderer.invoke("games");
 
-        loadingGames.value = false;
-      });
+      game.value = localStorage.getItem("game") || "";
+      description.value = localStorage.getItem("description") || "";
+      time.value = !!JSON.parse(localStorage.getItem("time")!);
+      status.value = statuses.find(
+        ({ name }) => name === localStorage.getItem("status")!
+      )!;
+
+      loadingGames.value = false;
+    });
 
     const toast = (message: string) => {
       toastMessage.value = message;
@@ -165,10 +191,15 @@ export default defineComponent({
           game.value,
           description.value,
           time.value,
-          status.value.id
+          status.value.name
         );
 
-        toast("Status Updated");
+        localStorage.setItem("game", game.value);
+        localStorage.setItem("description", description.value);
+        localStorage.setItem("time", time.value.toString());
+        localStorage.setItem("status", status.value.name);
+
+        toast("Status Saved");
       }
     };
 
@@ -184,13 +215,17 @@ export default defineComponent({
       status,
       statuses,
 
-      gameRules: [(v: string) => !!v || "A Game is required"],
+      gameRules: [(game: string) => !!game || "A game is required"],
+      descriptionRules: [
+        ({ length }: string) =>
+          length !== 1 || "Must be at least 2 characters long",
+      ],
 
       submit,
       clear() {
         ipcRenderer.send("clear");
 
-        toast("Clearing Status");
+        toast("Cleared Status");
       },
 
       toastMessage,
