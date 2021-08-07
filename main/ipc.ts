@@ -15,7 +15,11 @@ ipcMain.handle("games", async () => {
 
   gameData = data
     .filter(({ name }) => games[name])
-    .map(({ id, name: img }) => ({ id, img, name: games[img] }))
+    .map(({ id, name: img }) => ({
+      id,
+      img,
+      name: games[img].replace("é", "e"),
+    }))
     .sort(({ name: a }, { name: b }) => a.localeCompare(b));
 
   return Object.values(gameData);
